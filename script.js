@@ -65,4 +65,5 @@ function calcular() {
         top: document.getElementById('resultado').offsetTop - 20,
         behavior: 'smooth'
     });
+
 }
