@@ -1,69 +1,91 @@
 /**
- * Lógica de Impostos de Importação 2025
- * Mantendo o foco em simplicidade e precisão.
+ * Logica Blindada - Calculadora de Importação 2025
  */
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchDolar();
 });
 
+// Busca cotação atual do dólar via API
 async function fetchDolar() {
     const inputCotacao = document.getElementById('cotacao');
     try {
         const response = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
         const data = await response.json();
-        const dolar = parseFloat(data.USDBRL.bid).toFixed(2);
-        inputCotacao.value = dolar;
+        const bid = parseFloat(data.USDBRL.bid);
+        inputCotacao.value = bid.toFixed(2);
     } catch (error) {
-        console.error("Falha ao buscar cotação. Usando valor padrão.");
-        inputCotacao.value = "5.50";
+        console.error("Erro na API de câmbio:", error);
+        inputCotacao.value = "5.50"; // Fallback
     }
 }
 
 function calcular() {
-    const usd = parseFloat(document.getElementById('valorUSD').value);
+    const valorUSD = parseFloat(document.getElementById('valorUSD').value);
     const cotacao = parseFloat(document.getElementById('cotacao').value);
     const aliquotaICMS = parseFloat(document.getElementById('estado').value);
 
-    if (!usd || !cotacao) {
+    if (!valorUSD || isNaN(valorUSD)) {
         alert("Por favor, insira o valor do produto.");
         return;
     }
 
-    const totalBRL = usd * cotacao;
-    let impostoFederal = 0;
+    const totalBRL = valorUSD * cotacao;
+    let impostoII = 0;
 
-    // Regra Federal Progressiva 2025
-    if (usd <= 50) {
-        impostoFederal = totalBRL * 0.20;
+    // REGRA FEDERAL 2025: 
+    // Até $50 = 20%
+    // Acima de $50 = 60% com abatimento de $20 (no valor em dólar)
+    if (valorUSD <= 50) {
+        impostoII = totalBRL * 0.20;
     } else {
+        const impostoBruto = totalBRL * 0.60;
         const abatimentoBRL = 20 * cotacao;
-        impostoFederal = (totalBRL * 0.60) - abatimentoBRL;
+        impostoII = impostoBruto - abatimentoBRL;
     }
 
-    // Cálculo ICMS "Por Dentro"
-    // Base de Cálculo = (Valor do Produto + Imposto Federal) / (1 - Alíquota ICMS)
-    const baseCalculoICMS = (totalBRL + impostoFederal) / (1 - aliquotaICMS);
-    const valorICMS = baseCalculoICMS * aliquotaICMS;
+    // REGRA ESTADUAL (ICMS por dentro)
+    // Base ICMS = (Valor + II) / (1 - Alíquota)
+    const baseICMS = (totalBRL + impostoII) / (1 - aliquotaICMS);
+    const valorICMS = baseICMS * aliquotaICMS;
 
-    const custoFinal = totalBRL + impostoFederal + valorICMS;
-    const porcentagemEfetiva = ((custoFinal - totalBRL) / totalBRL) * 100;
+    const totalFinal = totalBRL + impostoII + valorICMS;
+    const porcentagemEfetiva = ((totalFinal - totalBRL) / totalBRL) * 100;
 
-    // Exibição nos campos do HTML
-    document.getElementById('resOriginal').innerText = `R$ ${totalBRL.toFixed(2)}`;
-    document.getElementById('resFederal').innerText = `R$ ${impostoFederal.toFixed(2)}`;
-    document.getElementById('resEstadual').innerText = `R$ ${valorICMS.toFixed(2)}`;
-    document.getElementById('resTotal').innerText = `R$ ${custoFinal.toFixed(2)}`;
+    // Preenchimento dos resultados
+    document.getElementById('resOriginal').innerText = "R$ " + totalBRL.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('resFederal').innerText = "R$ " + impostoII.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('resEstadual').innerText = "R$ " + valorICMS.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('resTotal').innerText = "R$ " + totalFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
     
-    const alerta = document.getElementById('alertaEfetivo');
-    alerta.innerText = `⚠️ Custo Tributário Real: ${porcentagemEfetiva.toFixed(1)}% sobre o valor original.`;
+    document.getElementById('alertaEfetivo').innerText = 
+        "Carga tributária final: " + porcentagemEfetiva.toFixed(1) + "% sobre o valor do item.";
 
-    document.getElementById('resultado').style.display = 'block';
-    
-    // Smooth scroll para o resultado
-    window.scrollTo({
-        top: document.getElementById('resultado').offsetTop - 20,
-        behavior: 'smooth'
-    });
+    // Exibe o card de resultados
+    const resDiv = document.getElementById('resultado');
+    resDiv.style.display = 'block';
 
+    // Rola suavemente para o resultado
+    resDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Controle do Modal (JS Puro para evitar bugs de classe)
+function abrirModal() {
+    const modal = document.getElementById('modalCursos');
+    modal.style.display = 'flex'; 
+    document.body.style.overflow = 'hidden'; 
+}
+
+function fecharModal() {
+    const modal = document.getElementById('modalCursos');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Fecha se clicar no fundo escuro
+window.onclick = function(event) {
+    const modal = document.getElementById('modalCursos');
+    if (event.target == modal) {
+        fecharModal();
+    }
 }
