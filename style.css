@@ -8,13 +8,13 @@
     padding: 12px;
     border-radius: 12px;
     outline: none;
-    transition: all 0.3s;
-    font-weight: 600;
+    transition: all 0.2s;
 }
 
 .input-field:focus {
     border-color: #3b82f6;
-    background-color: white;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
 .btn-primary {
@@ -24,12 +24,13 @@
     font-weight: 800;
     padding: 16px;
     border-radius: 14px;
-    transition: all 0.3s;
+    transition: all 0.2s;
+    cursor: pointer;
 }
 
 .btn-primary:hover {
     background: #1d4ed8;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .btn-success {
@@ -39,21 +40,27 @@
     font-weight: 900;
     padding: 18px;
     border-radius: 14px;
-    animation: pulse 2s infinite;
+    animation: pulseCustom 2s infinite;
+    cursor: pointer;
 }
 
-@keyframes pulse {
+@keyframes pulseCustom {
     0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    70% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
     100% { transform: scale(1); }
 }
 
 .result-card {
-    display: none;
-    animation: slideUp 0.4s ease-out;
+    animation: slideIn 0.5s ease-out forwards;
 }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
