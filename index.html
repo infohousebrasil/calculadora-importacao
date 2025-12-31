@@ -3,126 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Impostos 2025</title>
+    <title>Calculadora de Impostos 2025 - Importação e Planejamento</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-50 font-sans text-gray-900">
+<body class="bg-gray-100 font-sans text-gray-900">
 
-    <header class="bg-gradient-tech py-12 px-4 text-center text-white">
-        <h1 class="text-3xl font-bold mb-2 uppercase tracking-tight">Simulador de Taxação 2025 🇧🇷</h1>
-        <p class="text-slate-400 italic text-sm">Atualizado com as novas regras de ICMS e Imposto de Importação.</p>
+    <header class="bg-gradient-tech py-12 px-4 text-center text-white shadow-lg">
+        <h1 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight">Calculadora de Taxação 2025 🇧🇷</h1>
+        <p class="text-slate-400 max-w-md mx-auto">Cálculo preciso de ICMS e Imposto Federal para importações, focado em Itaboraí e todo Brasil.</p>
     </header>
 
-    <main class="max-w-xl mx-auto -mt-10 p-4">
-        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border border-gray-100">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <main class="max-w-2xl mx-auto -mt-10 p-4 pb-20">
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Valor do Produto (USD)</label>
-                    <input type="number" id="valorUSD" placeholder="Ex: 45.00" class="input-field">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Valor do Produto (USD)</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2 text-gray-400">$</span>
+                        <input type="number" id="valorUSD" placeholder="0.00" class="w-full border-2 border-gray-100 p-2 pl-7 rounded-lg outline-none focus:border-blue-500 transition-all">
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Dólar Hoje (Automático)</label>
-                    <input type="number" id="cotacao" class="input-field bg-gray-50 font-bold text-blue-600">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Dólar Comercial (Auto)</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2 text-gray-400">R$</span>
+                        <input type="number" id="cotacao" class="w-full border-2 border-gray-100 p-2 pl-10 rounded-lg bg-gray-50 outline-none font-semibold text-blue-600">
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-6">
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Estado de Destino (ICMS)</label>
-                <select id="estado" class="input-field cursor-pointer">
+            <div class="mt-6">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Estado de Destino (ICMS)</label>
+                <select id="estado" class="w-full border-2 border-gray-100 p-2 rounded-lg outline-none focus:border-blue-500 transition-all bg-white cursor-pointer">
                     <option value="0.20">Rio de Janeiro (20%)</option>
                     <option value="0.20">São Paulo (20%)</option>
                     <option value="0.20">Minas Gerais (20%)</option>
                     <option value="0.17">Alagoas (17%)</option>
-                    <option value="0.20">Outros (Padrão 20%)</option>
+                    <option value="0.20">Outros Estados (Padrão 20%)</option>
                 </select>
             </div>
 
-            <button onclick="calcular()" class="btn-primary">
-                CALCULAR CUSTO TOTAL
+            <button onclick="calcular()" class="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl shadow-lg transition-all active:scale-95 uppercase tracking-wider">
+                Calcular Custo Final
             </button>
         </div>
 
-        <div id="resultado" class="result-card" style="display: none;">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
-                <div class="bg-red-50 p-4 border-b border-red-100 text-center">
-                    <span class="text-red-700 font-bold uppercase text-[10px] tracking-[0.2em]">Resumo dos Tributos</span>
+        <div id="resultado" class="result-card hidden">
+            <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+                <div class="bg-red-50 p-4 border-b border-red-100 text-center text-red-700 font-black uppercase tracking-widest text-sm">
+                    Detalhamento dos Tributos
                 </div>
                 
-                <div class="p-6 space-y-4">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-500 italic">Valor do produto convertido:</span>
-                        <span id="resOriginal" class="font-bold"></span>
+                <div class="p-8 space-y-4">
+                    <div class="flex justify-between items-center border-b border-gray-50 pb-3">
+                        <span class="text-gray-500 font-medium">Conversão Simples:</span>
+                        <span id="resOriginal" class="font-bold text-gray-800"></span>
                     </div>
-                    <div class="flex justify-between text-sm text-red-600">
-                        <span>Imposto Federal (II):</span>
-                        <span id="resFederal" class="font-bold"></span>
+                    <div class="flex justify-between items-center border-b border-gray-50 pb-3">
+                        <span class="text-gray-500 font-medium font-red-600">Imposto Federal (II):</span>
+                        <span id="resFederal" class="font-bold text-red-600"></span>
                     </div>
-                    <div class="flex justify-between text-sm text-red-600 border-b pb-4">
-                        <span>ICMS (Cálculo por dentro):</span>
-                        <span id="resEstadual" class="font-bold"></span>
+                    <div class="flex justify-between items-center border-b border-gray-50 pb-3">
+                        <span class="text-gray-500 font-medium text-red-600">ICMS (Imposto Estadual):</span>
+                        <span id="resEstadual" class="font-bold text-red-600"></span>
                     </div>
-                    <div class="flex justify-between text-2xl font-black pt-2 text-blue-900">
-                        <span>TOTAL FINAL:</span>
-                        <span id="resTotal"></span>
+                    <div class="flex justify-between items-center pt-4">
+                        <span class="text-xl font-black text-gray-900">TOTAL FINAL:</span>
+                        <span id="resTotal" class="text-2xl font-black text-blue-700"></span>
                     </div>
                 </div>
 
-                <div id="alertaEfetivo" class="bg-yellow-50 p-4 text-center font-bold text-yellow-800 text-xs italic"></div>
+                <div id="alertaEfetivo" class="bg-yellow-400 p-3 text-center font-black text-yellow-900 text-sm uppercase"></div>
 
-                <div class="p-4 bg-gray-50 border-t">
-                    <button onclick="abrirModal()" class="btn-success">
-                        🚀 QUERO PAGAR MENOS IMPOSTO!
-                    </button>
+                <div class="p-6 bg-slate-50 border-t border-gray-200">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase mb-6 tracking-widest text-center">Consultoria Financeira Integrada</h4>
+                    
+                    <div class="space-y-4">
+                        <div class="card-afiliado border-l-4 border-blue-600">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="bg-blue-100 p-2 rounded-full"><i class="fas fa-shield-alt text-blue-600"></i></div>
+                                <p class="text-sm font-bold text-slate-800">Independência e Blindagem Fiscal</p>
+                            </div>
+                            <p class="text-xs text-slate-600 mb-3">Para investidores: aprenda a usar LLCs e Holdings para reduzir impostos legalmente.</p>
+                            <a href="https://go.hotmart.com/W103598052B" target="_blank" class="btn-link bg-blue-600 hover:bg-blue-700">ACESSAR GUIA MACRO →</a>
+                        </div>
+
+                        <div class="card-afiliado border-l-4 border-emerald-500">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="bg-emerald-100 p-2 rounded-full"><i class="fas fa-university text-emerald-600"></i></div>
+                                <p class="text-sm font-bold text-slate-800">Alerta: Novas Regras Pix e Bancos</p>
+                            </div>
+                            <p class="text-xs text-slate-600 mb-3">Evite multas e entenda o monitoramento fiscal das suas movimentações bancárias.</p>
+                            <a href="https://go.hotmart.com/O103598150J" target="_blank" class="btn-link bg-emerald-600 hover:bg-emerald-700">VER REGRAS DE SEGURANÇA →</a>
+                        </div>
+
+                        <div class="card-afiliado border-l-4 border-cyan-500">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="bg-cyan-100 p-2 rounded-full"><i class="fas fa-piggy-bank text-cyan-600"></i></div>
+                                <p class="text-sm font-bold text-slate-800">Prosperidade com Renda de R$ 2 mil</p>
+                            </div>
+                            <p class="text-xs text-slate-600 mb-3">Descubra como organizar suas finanças e fazer o dinheiro render mesmo com renda baixa.</p>
+                            <a href="https://go.hotmart.com/K103598356K?dp=1" target="_blank" class="btn-link bg-cyan-600 hover:bg-cyan-700">QUERO ECONOMIZAR AGORA →</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <div id="modalCursos" style="display: none;" class="fixed inset-0 z-[9999] items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden transform transition-all">
-            <div class="bg-gradient-tech p-6 text-white flex justify-between items-center">
-                <div>
-                    <h3 class="text-xl font-bold">Soluções Inteligentes 💡</h3>
-                    <p class="text-xs text-slate-400">Métodos para reduzir sua carga tributária</p>
-                </div>
-                <button onclick="fecharModal()" class="text-white/50 hover:text-white text-4xl leading-none">&times;</button>
-            </div>
-
-            <div class="p-6 space-y-4">
-                <p class="text-sm text-gray-600 font-medium">O cálculo mostrou que a taxa é alta. Veja como burlar o sistema legalmente:</p>
-                
-                <a href="SEU_LINK_AQUI" target="_blank" class="block group border-2 border-gray-100 p-4 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition">
-                    <div class="flex justify-between items-start">
-                        <span class="text-[10px] font-black bg-blue-100 text-blue-700 px-2 py-1 rounded">EUA</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-blue-500"></i>
-                    </div>
-                    <h4 class="font-bold text-gray-800 mt-2">Redirecionadores de Encomendas</h4>
-                    <p class="text-xs text-gray-500 mt-1">Como ter um endereço nos EUA e consolidar pacotes para pagar menos.</p>
-                </a>
-
-                <a href="SEU_LINK_AQUI" target="_blank" class="block group border-2 border-gray-100 p-4 rounded-2xl hover:border-green-500 hover:bg-green-50 transition">
-                    <div class="flex justify-between items-start">
-                        <span class="text-[10px] font-black bg-green-100 text-green-700 px-2 py-1 rounded">FRONTEIRA</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-green-500"></i>
-                    </div>
-                    <h4 class="font-bold text-gray-800 mt-2">Segredos do Paraguai</h4>
-                    <p class="text-xs text-gray-500 mt-1">O guia para aproveitar as cotas terrestres sem impostos.</p>
-                </a>
-            </div>
-
-            <div class="p-4 text-center">
-                <button onclick="fecharModal()" class="text-xs text-gray-400 font-bold hover:text-gray-600 uppercase tracking-tighter">Fechar e voltar ao cálculo</button>
-            </div>
-        </div>
-    </div>
-
-    <footer class="text-center py-8 text-gray-400 text-[10px] uppercase tracking-widest">
-        Itaboraí/RJ • 2025 • Baseado na Legislação Vigente
+    <footer class="text-center py-10 text-gray-400 text-xs">
+        <p>© 2025 - Desenvolvido para Transparência Fiscal. Itaboraí/RJ.</p>
     </footer>
 
     <script src="script.js"></script>
 </body>
 </html>
-
