@@ -2,67 +2,124 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enviar Pedido</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Encomendar Música</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding: 20px; background: #f4f4f4; }
-        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        .step { display: none; }
-        .step.active { display: block; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; margin-top: 15px; cursor: pointer; border: none; border-radius: 5px; background: #25d366; color: white; font-weight: bold; }
-        button.next { background: #007bff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background: linear-gradient(180deg, #6a82fb 0%, #fc5c7d 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .card-container { background: white; width: 100%; max-width: 400px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; }
+        .progress-wrapper { height: 6px; background: #f0f0f0; width: 100%; }
+        #progress-fill { height: 100%; background: #007bff; width: 25%; transition: width 0.5s ease; }
+        .form-window { overflow: hidden; width: 100%; }
+        .form-rail { display: flex; width: 400%; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .step-page { width: 25%; padding: 30px 20px; flex-shrink: 0; }
+        h2 { color: #222; font-size: 1.5rem; margin-bottom: 8px; }
+        p { color: #666; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4; }
+        label { display: block; font-size: 0.75rem; font-weight: 700; color: #888; margin-bottom: 8px; text-transform: uppercase; }
+        input, textarea { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 12px; font-size: 1rem; margin-bottom: 10px; transition: all 0.3s; }
+        input:focus { border-color: #007bff; outline: none; }
+        .genre-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-height: 200px; overflow-y: auto; padding: 5px; margin-bottom: 10px; border: 1px solid #f9f9f9; }
+        .genre-chip { padding: 10px; border: 2px solid #eee; border-radius: 10px; text-align: center; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; background: white; }
+        .genre-chip.selected { background: #007bff; color: white; border-color: #007bff; }
+        .button-group { display: flex; gap: 10px; margin-top: 10px; }
+        .btn { flex: 1; padding: 16px; border: none; border-radius: 14px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.2s; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: #007bff; color: white; }
+        .btn-back { background: #eee; color: #666; flex: 0.3; }
+        .btn-submit { background: #25d366; color: white; }
+        .btn:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <form id="multiStepForm">
-        <div class="step active" id="step1">
-            <h3>Qual seu WhatsApp?</h3>
-            <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" required>
-            <button type="button" class="next" onclick="nextStep(2)">Próximo</button>
-        </div>
-
-        <div class="step" id="step2">
-            <h3>Qual seu nome?</h3>
-            <input type="text" id="nome" placeholder="Digite seu nome" required>
-            <button type="button" class="next" onclick="nextStep(3)">Próximo</button>
-        </div>
-
-        <div class="step" id="step3">
-            <h3>Resumo da história:</h3>
-            <textarea id="historia" rows="5" placeholder="Conte-nos mais..."></textarea>
-            <button type="submit">Enviar Pedido via WhatsApp</button>
+<div class="card-container">
+    <div class="progress-wrapper"><div id="progress-fill"></div></div>
+    <form id="leadForm" class="form-window">
+        <div class="form-rail" id="rail">
+            <div class="step-page">
+                <h2>WhatsApp</h2>
+                <p>Insira seu número para contato.</p>
+                <label>Número</label>
+                <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15">
+                <button type="button" class="btn btn-next" onclick="move(2)">Próximo →</button>
+            </div>
+            <div class="step-page">
+                <h2>Seu Nome</h2>
+                <p>Como gostaria de ser chamado?</p>
+                <label>Nome Completo</label>
+                <input type="text" id="nome" placeholder="Digite seu nome">
+                <div class="button-group">
+                    <button type="button" class="btn btn-back" onclick="move(1)">←</button>
+                    <button type="button" class="btn btn-next" onclick="move(3)">Próximo →</button>
+                </div>
+            </div>
+            <div class="step-page">
+                <h2>Estilo Musical</h2>
+                <p>Escolha até 2 estilos:</p>
+                <div class="genre-grid" id="genreGrid"></div>
+                <div class="button-group">
+                    <button type="button" class="btn btn-back" onclick="move(2)">←</button>
+                    <button type="button" class="btn btn-next" onclick="move(4)">Próximo →</button>
+                </div>
+            </div>
+            <div class="step-page">
+                <h2>A História</h2>
+                <p>Conte os detalhes do seu pedido.</p>
+                <label>Resumo</label>
+                <textarea id="historia" rows="3" placeholder="Escreva aqui..."></textarea>
+                <div class="button-group">
+                    <button type="button" class="btn btn-back" onclick="move(3)">←</button>
+                    <button type="submit" class="btn btn-submit">Enviar Pedido</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>
 
 <script>
-    function nextStep(stepNumber) {
-        // Esconde todos os passos
-        document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
-        // Mostra o passo atual
-        document.getElementById('step' + stepNumber).classList.add('active');
+    const generos = ["Samba", "Pagode", "Rock", "Folk", "Funk", "Trap", "Rap", "Hip-hop", "Dance", "Eletrônica", "Pop", "Calma (Lofi)", "Anos 70", "Anos 60", "Black Music"];
+    let selecionados = [];
+    const grid = document.getElementById('genreGrid');
+
+    generos.forEach(g => {
+        const chip = document.createElement('div');
+        chip.className = 'genre-chip';
+        chip.innerText = g;
+        chip.onclick = () => {
+            if(chip.classList.contains('selected')) {
+                chip.classList.remove('selected');
+                selecionados = selecionados.filter(i => i !== g);
+            } else if(selecionados.length < 2) {
+                chip.classList.add('selected');
+                selecionados.push(g);
+            }
+        };
+        grid.appendChild(chip);
+    });
+
+    function move(step) {
+        if (step > 1) {
+            const prev = step - 1;
+            if(prev === 1 && !document.getElementById('whatsapp').value) return alert("Preencha o WhatsApp");
+            if(prev === 2 && !document.getElementById('nome').value) return alert("Preencha o Nome");
+            if(prev === 3 && selecionados.length === 0) return alert("Escolha ao menos 1 estilo");
+        }
+        document.getElementById('rail').style.transform = `translateX(${(step-1)*-25}%)`;
+        document.getElementById('progress-fill').style.width = (step/4)*100 + '%';
     }
 
-    document.getElementById('multiStepForm').addEventListener('submit', function(e) {
+    document.getElementById('whatsapp').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.substring(0, 11);
+        if (v.length > 10) e.target.value = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7,11)}`;
+        else if (v.length > 2) e.target.value = `(${v.substring(0,2)}) ${v.substring(2)}`;
+        else e.target.value = v;
+    });
+
+    document.getElementById('leadForm').addEventListener('submit', (e) => {
         e.preventDefault();
-
-        const foneLead = document.getElementById('whatsapp').value;
-        const nome = document.getElementById('nome').value;
-        const historia = document.getElementById('historia').value;
-        
-        // O SEU número que vai receber o pedido
-        const meuWhatsapp = "5521995901577"; 
-
-        const textoFinal = `*Novo Pedido*\n\n*Nome:* ${nome}\n*WhatsApp:* ${foneLead}\n*História:* ${historia}`;
-        
-        const url = `https://wa.me/${meuWhatsapp}?text=${encodeURIComponent(textoFinal)}`;
-        
-        window.open(url, '_blank');
+        const texto = `*NOVO PEDIDO*\n\n*Nome:* ${document.getElementById('nome').value}\n*Zap:* ${document.getElementById('whatsapp').value}\n*Estilos:* ${selecionados.join(", ")}\n*História:* ${document.getElementById('historia').value}`;
+        window.open(`https://wa.me/5521995901577?text=${encodeURIComponent(texto)}`, '_blank');
     });
 </script>
-
 </body>
 </html>
