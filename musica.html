@@ -3,129 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitação de Pedido</title>
+    <title>Solicitação Profissional</title>
     <style>
-        :root {
-            --primary-color: #25d366;
-            --secondary-color: #007bff;
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-gradient);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f2f5;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0;
-            overflow: hidden;
+            padding: 20px;
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.95);
+        /* Container Principal (A Moldura) */
+        .card-viewport {
+            background: white;
             width: 100%;
             max-width: 400px;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden; /* Corta o que estiver fora do card */
             position: relative;
-            overflow: hidden;
         }
 
-        /* Barra de Progresso */
-        .progress-container {
-            height: 4px;
+        /* Barra de Progresso fixa no topo do card */
+        .progress-bar-bg {
+            height: 6px;
             background: #eee;
-            margin-bottom: 30px;
-            border-radius: 2px;
+            width: 100%;
         }
 
-        #progress-bar {
+        #progress-fill {
             height: 100%;
-            background: var(--secondary-color);
+            background: #007bff;
             width: 33%;
             transition: width 0.4s ease;
         }
 
-        /* Animação de Slide */
-        .form-wrapper {
+        /* O "Trilho" onde as páginas deslizam */
+        .form-rail {
             display: flex;
+            width: 300%; /* 3 páginas = 300% */
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 300%; /* 3 passos = 300% */
         }
 
-        .step {
-            width: 100%;
+        /* Cada "Página" individual */
+        .step-page {
+            width: 33.333%; /* Exatamente 1/3 do rail (que é 100% do card) */
+            padding: 30px;
             flex-shrink: 0;
         }
 
-        h2 { color: #333; margin-bottom: 10px; font-size: 1.5rem; }
-        p { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+        h2 { color: #1c1e21; margin-bottom: 8px; font-size: 1.4rem; }
+        p { color: #606770; font-size: 0.9rem; margin-bottom: 20px; }
+
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem; color: #444; }
 
         input, textarea {
             width: 100%;
             padding: 12px;
-            margin-top: 10px;
-            border: 2px solid #eee;
-            border-radius: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
-        input:focus, textarea:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-        }
+        input:focus { border-color: #007bff; outline: none; }
 
-        button {
+        .btn {
             width: 100%;
-            padding: 15px;
-            margin-top: 25px;
+            padding: 14px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
+            transition: background 0.3s;
         }
 
-        .btn-next { background: var(--secondary-color); color: white; }
-        .btn-submit { background: var(--primary-color); color: white; }
-        button:active { transform: scale(0.98); }
+        .btn-next { background: #007bff; color: white; margin-top: 10px; }
+        .btn-submit { background: #25d366; color: white; margin-top: 10px; }
+        .btn:hover { opacity: 0.9; }
 
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="progress-container">
-        <div id="progress-bar"></div>
+<div class="card-viewport">
+    <div class="progress-bar-bg">
+        <div id="progress-fill"></div>
     </div>
 
-    <form id="multiStepForm">
-        <div class="form-wrapper" id="wrapper">
+    <form id="leadForm">
+        <div class="form-rail" id="rail">
             
-            <div class="step">
+            <div class="step-page">
                 <h2>WhatsApp</h2>
-                <p>Como podemos entrar em contato?</p>
-                <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required>
-                <button type="button" class="btn-next" onclick="goToStep(2)">Próximo</button>
+                <p>Insira seu número para contato.</p>
+                <label>Número do WhatsApp</label>
+                <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15">
+                <button type="button" class="btn btn-next" onclick="go(2)">Próximo</button>
             </div>
 
-            <div class="step">
+            <div class="step-page">
                 <h2>Seu Nome</h2>
-                <p>Como gostaria de ser chamado?</p>
-                <input type="text" id="nome" placeholder="Digite seu nome completo" required>
-                <button type="button" class="btn-next" onclick="goToStep(3)">Próximo</button>
+                <p>Como devemos te chamar?</p>
+                <label>Nome Completo</label>
+                <input type="text" id="nome" placeholder="Digite seu nome">
+                <button type="button" class="btn btn-next" onclick="go(3)">Próximo</button>
             </div>
 
-            <div class="step">
-                <h2>Resumo da História</h2>
-                <p>Conte os detalhes do seu pedido.</p>
-                <textarea id="historia" rows="5" placeholder="Escreva aqui..." required></textarea>
-                <button type="submit" class="btn-submit">Enviar para o WhatsApp</button>
+            <div class="step-page">
+                <h2>Sua História</h2>
+                <p>Conte os detalhes do pedido.</p>
+                <label>Resumo</label>
+                <textarea id="historia" rows="4" placeholder="Escreva aqui..."></textarea>
+                <button type="submit" class="btn btn-submit">Enviar Pedido</button>
             </div>
 
         </div>
@@ -133,50 +128,36 @@
 </div>
 
 <script>
-    // 1. Lógica de Navegação com Slide
-    function goToStep(stepNumber) {
-        const wrapper = document.getElementById('wrapper');
-        const progressBar = document.getElementById('progress-bar');
+    // Navegação suave
+    function go(step) {
+        const rail = document.getElementById('rail');
+        const fill = document.getElementById('progress-fill');
         
-        // Move o wrapper para a esquerda (0, -100%, -200%)
-        const offset = (stepNumber - 1) * -100;
-        wrapper.style.transform = `translateX(${offset}%)`;
+        // Deslocamento: 0 para o passo 1, -33.33% para o 2, -66.66% para o 3
+        const move = (step - 1) * -33.333;
+        rail.style.transform = `translateX(${move}%)`;
         
-        // Atualiza barra de progresso
-        const progressWidth = (stepNumber / 3) * 100;
-        progressBar.style.width = `${progressWidth}%`;
+        // Atualiza barra
+        fill.style.width = (step / 3) * 100 + '%';
     }
 
-    // 2. Máscara Dinâmica para WhatsApp
-    const handlePhone = (event) => {
-        let input = event.target;
-        input.value = phoneMask(input.value);
-    }
+    // Máscara de Telefone
+    document.getElementById('whatsapp').addEventListener('input', (e) => {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
 
-    const phoneMask = (value) => {
-        if (!value) return "";
-        value = value.replace(/\D/g,'');
-        value = value.replace(/(\d{2})(\d)/,"($1) $2");
-        value = value.replace(/(\d)(\d{4})$/,"$1-$2");
-        return value;
-    }
-
-    document.getElementById('whatsapp').addEventListener('keyup', handlePhone);
-
-    // 3. Envio Final
-    document.getElementById('multiStepForm').addEventListener('submit', function(e) {
+    // Envio
+    document.getElementById('leadForm').addEventListener('submit', function(e) {
         e.preventDefault();
-
-        const foneLead = document.getElementById('whatsapp').value;
         const nome = document.getElementById('nome').value;
-        const historia = document.getElementById('historia').value;
+        const zapLead = document.getElementById('whatsapp').value;
+        const msg = document.getElementById('historia').value;
         
-        const meuWhatsapp = "5521995901577"; // Substitua pelo seu número
-
-        const textoFinal = `*NOVO PEDIDO*\n\n*Nome:* ${nome}\n*WhatsApp:* ${foneLead}\n*História:* ${historia}`;
-        const url = `https://wa.me/${meuWhatsapp}?text=${encodeURIComponent(textoFinal)}`;
+        const seuNumero = "5521999999999"; // Coloque seu numero aqui
+        const texto = `*NOVO PEDIDO*\n\n*Nome:* ${nome}\n*WhatsApp:* ${zapLead}\n*História:* ${msg}`;
         
-        window.open(url, '_blank');
+        window.open(`https://wa.me/${seuNumero}?text=${encodeURIComponent(texto)}`, '_blank');
     });
 </script>
 
