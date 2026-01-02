@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação de Pedido</title>
+    <style>
+        :root {
+            --primary-color: #25d366;
+            --secondary-color: #007bff;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Barra de Progresso */
+        .progress-container {
+            height: 4px;
+            background: #eee;
+            margin-bottom: 30px;
+            border-radius: 2px;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: var(--secondary-color);
+            width: 33%;
+            transition: width 0.4s ease;
+        }
+
+        /* Animação de Slide */
+        .form-wrapper {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 300%; /* 3 passos = 300% */
+        }
+
+        .step {
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        h2 { color: #333; margin-bottom: 10px; font-size: 1.5rem; }
+        p { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn-next { background: var(--secondary-color); color: white; }
+        .btn-submit { background: var(--primary-color); color: white; }
+        button:active { transform: scale(0.98); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <form id="multiStepForm">
+        <div class="form-wrapper" id="wrapper">
+            
+            <div class="step">
+                <h2>WhatsApp</h2>
+                <p>Como podemos entrar em contato?</p>
+                <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required>
+                <button type="button" class="btn-next" onclick="goToStep(2)">Próximo</button>
+            </div>
+
+            <div class="step">
+                <h2>Seu Nome</h2>
+                <p>Como gostaria de ser chamado?</p>
+                <input type="text" id="nome" placeholder="Digite seu nome completo" required>
+                <button type="button" class="btn-next" onclick="goToStep(3)">Próximo</button>
+            </div>
+
+            <div class="step">
+                <h2>Resumo da História</h2>
+                <p>Conte os detalhes do seu pedido.</p>
+                <textarea id="historia" rows="5" placeholder="Escreva aqui..." required></textarea>
+                <button type="submit" class="btn-submit">Enviar para o WhatsApp</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<script>
+    // 1. Lógica de Navegação com Slide
+    function goToStep(stepNumber) {
+        const wrapper = document.getElementById('wrapper');
+        const progressBar = document.getElementById('progress-bar');
+        
+        // Move o wrapper para a esquerda (0, -100%, -200%)
+        const offset = (stepNumber - 1) * -100;
+        wrapper.style.transform = `translateX(${offset}%)`;
+        
+        // Atualiza barra de progresso
+        const progressWidth = (stepNumber / 3) * 100;
+        progressBar.style.width = `${progressWidth}%`;
+    }
+
+    // 2. Máscara Dinâmica para WhatsApp
+    const handlePhone = (event) => {
+        let input = event.target;
+        input.value = phoneMask(input.value);
+    }
+
+    const phoneMask = (value) => {
+        if (!value) return "";
+        value = value.replace(/\D/g,'');
+        value = value.replace(/(\d{2})(\d)/,"($1) $2");
+        value = value.replace(/(\d)(\d{4})$/,"$1-$2");
+        return value;
+    }
+
+    document.getElementById('whatsapp').addEventListener('keyup', handlePhone);
+
+    // 3. Envio Final
+    document.getElementById('multiStepForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const foneLead = document.getElementById('whatsapp').value;
+        const nome = document.getElementById('nome').value;
+        const historia = document.getElementById('historia').value;
+        
+        const meuWhatsapp = "5521995901577"; // Substitua pelo seu número
+
+        const textoFinal = `*NOVO PEDIDO*\n\n*Nome:* ${nome}\n*WhatsApp:* ${foneLead}\n*História:* ${historia}`;
+        const url = `https://wa.me/${meuWhatsapp}?text=${encodeURIComponent(textoFinal)}`;
+        
+        window.open(url, '_blank');
+    });
+</script>
+
+</body>
+</html>
