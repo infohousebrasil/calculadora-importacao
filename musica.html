@@ -145,7 +145,7 @@
     </form>
 </div>
 
-<script>
+!-- <script>
     function move(step) {
         const rail = document.getElementById('rail');
         const fill = document.getElementById('progress-fill');
@@ -184,7 +184,74 @@
         
         window.open(`https://wa.me/${telDestino}?text=${encodeURIComponent(texto)}`, '_blank');
     });
+</script> --!
+
+<script>
+    function move(step) {
+        // Identifica qual é a etapa anterior (de onde o usuário está vindo)
+        const currentStep = step > 1 ? step - 1 : 1;
+        const rail = document.getElementById('rail');
+        const fill = document.getElementById('progress-fill');
+        
+        // --- LÓGICA DE VALIDAÇÃO ---
+        if (step > currentStep) { // Só valida se ele estiver tentando AVANÇAR
+            let inputAtual;
+            
+            if (currentStep === 1) inputAtual = document.getElementById('whatsapp');
+            if (currentStep === 2) inputAtual = document.getElementById('nome');
+
+            if (inputAtual && inputAtual.value.trim() === "") {
+                inputAtual.style.borderColor = "#ff4d4d"; // Borda vermelha
+                inputAtual.focus();
+                return; // INTERROMPE a função aqui, não deixa passar
+            } else {
+                inputAtual.style.borderColor = "#eee"; // Volta ao normal se preenchido
+            }
+        }
+
+        // Se passar na validação, executa o movimento
+        const x = (step - 1) * -33.333;
+        rail.style.transform = `translateX(${x}%)`;
+        fill.style.width = (step / 3) * 100 + '%';
+    }
+
+    // Máscara de Telefone (Mantida)
+    document.getElementById('whatsapp').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.substring(0, 11);
+        if (v.length > 10) {
+            e.target.value = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7,11)}`;
+        } else if (v.length > 6) {
+            e.target.value = `(${v.substring(0,2)}) ${v.substring(2,6)}-${v.substring(6,10)}`;
+        } else if (v.length > 2) {
+            e.target.value = `(${v.substring(0,2)}) ${v.substring(2)}`;
+        } else {
+            e.target.value = v;
+        }
+    });
+
+    // Envio Final com Validação da última etapa
+    document.getElementById('leadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const historia = document.getElementById('historia');
+
+        if (historia.value.trim() === "") {
+            historia.style.borderColor = "#ff4d4d";
+            historia.focus();
+            return;
+        }
+
+        const nome = document.getElementById('nome').value;
+        const zap = document.getElementById('whatsapp').value;
+        const msg = historia.value;
+        
+        const telDestino = "5521999999999"; 
+        const texto = `*NOVO LEAD*\n\n*Nome:* ${nome}\n*WhatsApp:* ${zap}\n*História:* ${msg}`;
+        
+        window.open(`https://wa.me/${telDestino}?text=${encodeURIComponent(texto)}`, '_blank');
+    });
 </script>
+
 
 </body>
 </html>
