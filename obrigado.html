@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Confirmado!</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        
+        body {
+            background: linear-gradient(180deg, #6a82fb 0%, #fc5c7d 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .thank-you-card {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 30px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .icon-check {
+            width: 80px;
+            height: 80px;
+            background: #25d366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
+        }
+
+        h1 { color: #222; margin-bottom: 15px; font-size: 1.8rem; }
+        p { color: #666; line-height: 1.6; margin-bottom: 25px; }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px dashed #007bff;
+            margin-bottom: 25px;
+        }
+
+        .info-box strong { color: #007bff; display: block; margin-bottom: 5px; }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 16px 25px;
+            border-radius: 14px;
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .btn-whatsapp:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+<div class="thank-you-card">
+    <div class="icon-check">✓</div>
+    <h1>Pagamento Realizado!</h1>
+    <p>Obrigado por confiar no nosso trabalho. Para iniciarmos a produção do seu pedido, precisamos de apenas mais um passo:</p>
+    
+    <div class="info-box">
+        <strong>⚠️ IMPORTANTE</strong>
+        Envie o comprovante do Mercado Pago no nosso WhatsApp. O prazo de 24h começa a contar após o envio.
+    </div>
+
+    <a href="https://wa.me/5521999999999?text=Olá! Acabei de fazer o pagamento de R$ 9,99. Segue o comprovante." class="btn-whatsapp">
+        Enviar Comprovante Agora
+    </a>
+</div>
+
+</body>
+</html>
