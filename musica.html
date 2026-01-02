@@ -2,125 +2,143 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitação Profissional</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Solicitação</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f0f2f5;
-            height: 100vh;
+            background: linear-gradient(180deg, #6a82fb 0%, #fc5c7d 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        /* Container Principal (A Moldura) */
-        .card-viewport {
+        .card-container {
             background: white;
             width: 100%;
-            max-width: 400px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden; /* Corta o que estiver fora do card */
-            position: relative;
+            max-width: 380px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Barra de Progresso fixa no topo do card */
-        .progress-bar-bg {
-            height: 6px;
-            background: #eee;
+        /* Barra de progresso discreta */
+        .progress-wrapper { height: 6px; background: #f0f0f0; width: 100%; }
+        #progress-fill { 
+            height: 100%; 
+            background: #007bff; 
+            width: 33.3%; 
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        .form-window {
+            overflow: hidden;
             width: 100%;
         }
 
-        #progress-fill {
-            height: 100%;
-            background: #007bff;
-            width: 33%;
-            transition: width 0.4s ease;
-        }
-
-        /* O "Trilho" onde as páginas deslizam */
         .form-rail {
             display: flex;
-            width: 300%; /* 3 páginas = 300% */
+            width: 300%;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Cada "Página" individual */
         .step-page {
-            width: 33.333%; /* Exatamente 1/3 do rail (que é 100% do card) */
-            padding: 30px;
+            width: 33.333%;
+            padding: 35px 25px;
             flex-shrink: 0;
         }
 
-        h2 { color: #1c1e21; margin-bottom: 8px; font-size: 1.4rem; }
-        p { color: #606770; font-size: 0.9rem; margin-bottom: 20px; }
+        h2 { color: #222; font-size: 1.6rem; margin-bottom: 10px; }
+        p { color: #666; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.4; }
 
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem; color: #444; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.8rem; font-weight: 700; color: #888; margin-bottom: 8px; text-transform: uppercase; }
 
         input, textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
             font-size: 1rem;
-            margin-bottom: 10px;
+            color: #333;
+            transition: all 0.3s;
+            background: #fdfdfd;
         }
 
-        input:focus { border-color: #007bff; outline: none; }
+        input:focus, textarea:focus { border-color: #007bff; background: white; outline: none; }
+
+        .button-group { display: flex; gap: 10px; margin-top: 10px; }
 
         .btn {
-            width: 100%;
-            padding: 14px;
+            flex: 1;
+            padding: 16px;
             border: none;
-            border-radius: 8px;
+            border-radius: 14px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-next { background: #007bff; color: white; margin-top: 10px; }
-        .btn-submit { background: #25d366; color: white; margin-top: 10px; }
-        .btn:hover { opacity: 0.9; }
+        .btn-next { background: #007bff; color: white; }
+        .btn-back { background: #eee; color: #666; flex: 0.4; }
+        .btn-submit { background: #25d366; color: white; }
+        .btn:active { transform: scale(0.96); }
 
     </style>
 </head>
 <body>
 
-<div class="card-viewport">
-    <div class="progress-bar-bg">
+<div class="card-container">
+    <div class="progress-wrapper">
         <div id="progress-fill"></div>
     </div>
 
-    <form id="leadForm">
+    <form id="leadForm" class="form-window">
         <div class="form-rail" id="rail">
             
             <div class="step-page">
                 <h2>WhatsApp</h2>
-                <p>Insira seu número para contato.</p>
-                <label>Número do WhatsApp</label>
-                <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15">
-                <button type="button" class="btn btn-next" onclick="go(2)">Próximo</button>
+                <p>Como podemos entrar em contato com você hoje?</p>
+                <div class="input-group">
+                    <label>Seu número</label>
+                    <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15">
+                </div>
+                <button type="button" class="btn btn-next" onclick="move(2)">Próximo →</button>
             </div>
 
             <div class="step-page">
                 <h2>Seu Nome</h2>
-                <p>Como devemos te chamar?</p>
-                <label>Nome Completo</label>
-                <input type="text" id="nome" placeholder="Digite seu nome">
-                <button type="button" class="btn btn-next" onclick="go(3)">Próximo</button>
+                <p>Muito prazer! Como gostaria de ser chamado?</p>
+                <div class="input-group">
+                    <label>Nome completo</label>
+                    <input type="text" id="nome" placeholder="Digite seu nome">
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn btn-back" onclick="move(1)">←</button>
+                    <button type="button" class="btn btn-next" onclick="move(3)">Próximo →</button>
+                </div>
             </div>
 
             <div class="step-page">
-                <h2>Sua História</h2>
-                <p>Conte os detalhes do pedido.</p>
-                <label>Resumo</label>
-                <textarea id="historia" rows="4" placeholder="Escreva aqui..."></textarea>
-                <button type="submit" class="btn btn-submit">Enviar Pedido</button>
+                <h2>O Pedido</h2>
+                <p>Conte o resumo da sua história ou detalhes do pedido.</p>
+                <div class="input-group">
+                    <label>Mensagem</label>
+                    <textarea id="historia" rows="3" placeholder="Escreva aqui..."></textarea>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn btn-back" onclick="move(2)">←</button>
+                    <button type="submit" class="btn btn-submit">Finalizar Pedido</button>
+                </div>
             </div>
 
         </div>
@@ -128,36 +146,43 @@
 </div>
 
 <script>
-    // Navegação suave
-    function go(step) {
+    function move(step) {
         const rail = document.getElementById('rail');
         const fill = document.getElementById('progress-fill');
         
-        // Deslocamento: 0 para o passo 1, -33.33% para o 2, -66.66% para o 3
-        const move = (step - 1) * -33.333;
-        rail.style.transform = `translateX(${move}%)`;
+        // Deslocamento suave
+        const x = (step - 1) * -33.333;
+        rail.style.transform = `translateX(${x}%)`;
         
-        // Atualiza barra
+        // Progresso
         fill.style.width = (step / 3) * 100 + '%';
     }
 
-    // Máscara de Telefone
+    // Máscara Inteligente
     document.getElementById('whatsapp').addEventListener('input', (e) => {
-        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
-        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.substring(0, 11);
+        if (v.length > 10) {
+            e.target.value = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7,11)}`;
+        } else if (v.length > 6) {
+            e.target.value = `(${v.substring(0,2)}) ${v.substring(2,6)}-${v.substring(6,10)}`;
+        } else if (v.length > 2) {
+            e.target.value = `(${v.substring(0,2)}) ${v.substring(2)}`;
+        } else {
+            e.target.value = v;
+        }
     });
 
-    // Envio
     document.getElementById('leadForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const nome = document.getElementById('nome').value;
-        const zapLead = document.getElementById('whatsapp').value;
+        const zap = document.getElementById('whatsapp').value;
         const msg = document.getElementById('historia').value;
         
-        const seuNumero = "5521995901577"; // Coloque seu numero aqui
-        const texto = `*NOVO PEDIDO*\n\n*Nome:* ${nome}\n*WhatsApp:* ${zapLead}\n*História:* ${msg}`;
+        const telDestino = "5521995901577"; // ALTERE AQUI
+        const texto = `*NOVO LEAD*\n\n*Nome:* ${nome}\n*WhatsApp:* ${zap}\n*História:* ${msg}`;
         
-        window.open(`https://wa.me/${seuNumero}?text=${encodeURIComponent(texto)}`, '_blank');
+        window.open(`https://wa.me/${telDestino}?text=${encodeURIComponent(texto)}`, '_blank');
     });
 </script>
 
