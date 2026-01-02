@@ -145,47 +145,6 @@
     </form>
 </div>
 
-!-- <script>
-    function move(step) {
-        const rail = document.getElementById('rail');
-        const fill = document.getElementById('progress-fill');
-        
-        // Deslocamento suave
-        const x = (step - 1) * -33.333;
-        rail.style.transform = `translateX(${x}%)`;
-        
-        // Progresso
-        fill.style.width = (step / 3) * 100 + '%';
-    }
-
-    // Máscara Inteligente
-    document.getElementById('whatsapp').addEventListener('input', (e) => {
-        let v = e.target.value.replace(/\D/g, '');
-        if (v.length > 11) v = v.substring(0, 11);
-        if (v.length > 10) {
-            e.target.value = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7,11)}`;
-        } else if (v.length > 6) {
-            e.target.value = `(${v.substring(0,2)}) ${v.substring(2,6)}-${v.substring(6,10)}`;
-        } else if (v.length > 2) {
-            e.target.value = `(${v.substring(0,2)}) ${v.substring(2)}`;
-        } else {
-            e.target.value = v;
-        }
-    });
-
-    document.getElementById('leadForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const nome = document.getElementById('nome').value;
-        const zap = document.getElementById('whatsapp').value;
-        const msg = document.getElementById('historia').value;
-        
-        const telDestino = "5521995901577"; // ALTERE AQUI
-        const texto = `*NOVO PEDIDO*\n\n*Nome:* ${nome}\n*WhatsApp:* ${zap}\n*História:* ${msg}`;
-        
-        window.open(`https://wa.me/${telDestino}?text=${encodeURIComponent(texto)}`, '_blank');
-    });
-</script> --!
-
 <script>
     function move(step) {
         // Identifica qual é a etapa anterior (de onde o usuário está vindo)
