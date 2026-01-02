@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Pedido</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 20px; background: #f4f4f4; }
+        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; margin-top: 15px; cursor: pointer; border: none; border-radius: 5px; background: #25d366; color: white; font-weight: bold; }
+        button.next { background: #007bff; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <form id="multiStepForm">
+        <div class="step active" id="step1">
+            <h3>Qual seu WhatsApp?</h3>
+            <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" required>
+            <button type="button" class="next" onclick="nextStep(2)">Próximo</button>
+        </div>
+
+        <div class="step" id="step2">
+            <h3>Qual seu nome?</h3>
+            <input type="text" id="nome" placeholder="Digite seu nome" required>
+            <button type="button" class="next" onclick="nextStep(3)">Próximo</button>
+        </div>
+
+        <div class="step" id="step3">
+            <h3>Resumo da história:</h3>
+            <textarea id="historia" rows="5" placeholder="Conte-nos mais..."></textarea>
+            <button type="submit">Enviar Pedido via WhatsApp</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function nextStep(stepNumber) {
+        // Esconde todos os passos
+        document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+        // Mostra o passo atual
+        document.getElementById('step' + stepNumber).classList.add('active');
+    }
+
+    document.getElementById('multiStepForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const foneLead = document.getElementById('whatsapp').value;
+        const nome = document.getElementById('nome').value;
+        const historia = document.getElementById('historia').value;
+        
+        // O SEU número que vai receber o pedido
+        const meuWhatsapp = "5521999999999"; 
+
+        const textoFinal = `*Novo Pedido*\n\n*Nome:* ${nome}\n*WhatsApp do Lead:* ${foneLead}\n*História:* ${historia}`;
+        
+        const url = `https://wa.me/${meuWhatsapp}?text=${encodeURIComponent(textoFinal)}`;
+        
+        window.open(url, '_blank');
+    });
+</script>
+
+</body>
+</html>
