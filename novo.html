@@ -117,7 +117,7 @@
 
     document.getElementById('leadForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        const texto = `*NOVO PEDIDO*\n\n*Nome:* ${document.getElementById('nome').value}\n*Zap:* ${document.getElementById('whatsapp').value}\n*Estilos:* ${selecionados.join(", ")}\n*História:* ${document.getElementById('historia').value}`;
+        const texto = `*NOVO PEDIDO*\n\n*Nome:* ${document.getElementById('nome').value}\n*WhatsApp:* ${document.getElementById('whatsapp').value}\n*Estilos:* ${selecionados.join(", ")}\n*História:* ${document.getElementById('historia').value}`;
         window.open(`https://wa.me/5521995901577?text=${encodeURIComponent(texto)}`, '_blank');
     });
 </script>
