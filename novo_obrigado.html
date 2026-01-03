@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucesso! - ViraMúsica</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f2f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .container { width: 100%; max-width: 450px; }
+        
+        /* Card de Sucesso Principal */
+        .card-success { background: white; padding: 30px; border-radius: 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .icon-check { font-size: 50px; color: #25d366; margin-bottom: 15px; }
+        h1 { font-size: 1.6rem; color: #222; margin-bottom: 10px; }
+        p { color: #666; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; }
+        .btn-whatsapp { background: #25d366; color: white; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: bold; display: block; transition: transform 0.2s; }
+
+        /* CARD DE UPSELL (O Pulo do Gato) */
+        .card-upsell { 
+            background: linear-gradient(135deg, #ffffff 0%, #f9f0ff 100%); 
+            padding: 25px; 
+            border-radius: 24px; 
+            border: 2px solid #e0c3fc; 
+            text-align: center; 
+            position: relative;
+            box-shadow: 0 15px 35px rgba(118, 75, 162, 0.1);
+        }
+        .badge { background: #764ba2; color: white; font-size: 0.7rem; font-weight: bold; padding: 5px 12px; border-radius: 20px; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); text-transform: uppercase; }
+        .upsell-title { color: #5a189a; font-size: 1.2rem; margin: 10px 0; font-weight: 800; }
+        
+        /* Espaço para o GIF/Vídeo */
+        .video-placeholder { 
+            width: 100%; 
+            aspect-ratio: 16/9; 
+            background: #000; 
+            border-radius: 15px; 
+            margin: 15px 0; 
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .video-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+
+        .btn-upsell { 
+            background: #764ba2; 
+            color: white; 
+            text-decoration: none; 
+            padding: 12px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            display: block; 
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-upsell:hover { background: #5a189a; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card-success">
+        <div class="icon-check">✓</div>
+        <h1>Pedido Recebido!</h1>
+        <p>Clique abaixo para enviar o comprovante de <b>R$ 9,99</b> e ativar o prazo de 24h.</p>
+        <a href="https://wa.me/5521995901577?text=Olá! Segue o comprovante do pagamento de R$ 9,99." class="btn-whatsapp">Enviar Comprovante</a>
+    </div>
+
+    <div class="card-upsell">
+        <div class="badge">Oferta Exclusiva</div>
+        <h2 class="upsell-title">Transforme sua Música em Vídeo! 🎬</h2>
+        <p style="font-size: 0.85rem; color: #7b2cbf;">Dê vida às suas fotos com um clipe emocionante para postar no Reels ou TikTok.</p>
+        
+        <div class="video-placeholder">
+            <img src="URL_DO_SEU_GIF_AQUI.gif" alt="Exemplo de Vídeo Lyric">
+        </div>
+
+        <a href="video-oferta.html" class="btn-upsell">Saiba como garantir o seu →</a>
+    </div>
+</div>
+
+</body>
+</html>
